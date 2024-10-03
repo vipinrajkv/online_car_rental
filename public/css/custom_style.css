@@ -68,3 +68,6 @@ ul li a{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.main-div {
+padding-top: 8px;
+}
