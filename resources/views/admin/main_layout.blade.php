@@ -9,7 +9,7 @@
 	<script src="{{ asset('js/style.js') }}"></script>
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-	<link rel="stylesheet" href="{{ asset('css/custom_style.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/admin/custom_style.css') }}">
 	{{-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
 		id="bootstrap-css"> --}}
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
@@ -102,7 +102,7 @@
 										<div class="panel-body">
 											<ul class="nav navbar-nav">
 												{{-- <li><a href="{{route('brand.list')}}">Brands</a></li> --}}
-												<li><a href="{{route('product.list')}}"><span class="glyphicon  glyphicon-th-list"></span>Product</a></li>
+												<li><a href=""><span class="glyphicon  glyphicon-th-list"></span>Product</a></li>
 
 												<!-- Dropdown level 2 -->
 												<li class="panel panel-default" id="dropdown">
@@ -113,8 +113,8 @@
 													<div id="dropdown-lvl2" class="panel-collapse collapse">
 														<div class="panel-body">
 															<ul class="nav navbar-nav">
-																<li><a href="{{route('category.list')}}"><span class="glyphicon glyphicon-list-alt"></span>Categories</a></li>
-																<li><a href="{{route('subcategory.list')}}"><span class="glyphicon glyphicon-file"></span>Sub Categories</a></li>
+																<li><a href=""><span class="glyphicon glyphicon-list-alt"></span>Categories</a></li>
+																<li><a href=""><span class="glyphicon glyphicon-file"></span>Sub Categories</a></li>
 															</ul>
 														</div>
 													</div>
@@ -124,9 +124,9 @@
 									</div>
 								</li>
 
-								<li><a href="{{route('order.list')}}"><span class="glyphicon glyphicon-shopping-cart"></span> Orders</a></li>
-								<li><a href="{{route('users.list')}}"><span class="glyphicon glyphicon glyphicon-user"></span> Users</a></li>
-								<li><a href="{{route('roles.list')}}"><span class="glyphicon glyphicon glyphicon-user"></span> Roles</a></li>
+								<li><a href=""><span class="glyphicon glyphicon-shopping-cart"></span> Orders</a></li>
+								<li><a href=""><span class="glyphicon glyphicon glyphicon-user"></span> Users</a></li>
+								<li><a href=""><span class="glyphicon glyphicon glyphicon-user"></span> Roles</a></li>
 
 							</ul>
 						</div><!-- /.navbar-collapse -->

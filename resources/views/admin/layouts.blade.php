@@ -96,7 +96,7 @@
 						</div>
 						</form>
 						
-						<ul class="list-menu">
+						{{-- <ul class="list-menu">
 						<li><a href="#">People  </a></li>
 						<li><a href="#">Watches </a></li>
 						<li><a href="#">Cinema  </a></li>
@@ -104,7 +104,7 @@
 						<li><a href="#">Home items </a></li>
 						<li><a href="#">Animals</a></li>
 						<li><a href="#">People </a></li>
-						</ul>
+						</ul> --}}
 		
 					</div> <!-- card-body.// -->
 				</div>
