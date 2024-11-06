@@ -41,13 +41,12 @@ class IndexController extends Controller
         $categories = $request->query('categories') ?? [];
         $selectedDate = $request->query('selectedDate') ?? [];
         $carDetails =$this->car->getAvailableCars($categories,$selectedDate);
-        // dump($carDetails);
         $html = view('home.carlist', compact('carDetails'))->render();
 
         return response()->json([
             'status' => true,
             'html' => $html,
-            'message' => 'Getting messages successfully.',
+            'message' => 'Car details fetched successfully.',
         ]);
     }
 

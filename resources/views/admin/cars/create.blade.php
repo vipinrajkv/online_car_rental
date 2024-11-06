@@ -10,7 +10,7 @@
                 <div class="panel-heading ">
                     Add Car
                 </div>
-                <form method="POST" action="{{ route('admin.cars.create') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('admin.cars.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="panel-body">
                         <div class="form-group col-md-10 ">

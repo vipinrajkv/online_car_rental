@@ -60,7 +60,7 @@
                             <div class="dropdown-menu sm-menu">
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
-                        document.getElementById('logout-form').submit();">
+                                        document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}</a>
                             </div>
                         </li>
@@ -332,6 +332,11 @@
             },
         });
     });
+
+    $('#daterange').on('apply.daterangepicker', function(ev, picker) {
+        var selectedDates = picker.startDate.format('M/DD hh:mm A') + ' - ' + picker.endDate.format('M/DD hh:mm A');
+        $('#daterange span').text(selectedDates);
+    });
     
     $(document).ready(function() {
        var categoryList = categoryFilter() ?? [];
@@ -394,7 +399,8 @@
         
     });
     
-    $(document).find('#dateLocationFiltrButton').click(function() {
+    $(document).find('#dateLocationFiltrButton').click(function(e) {
+        e.preventDefault();
         var categoryList = categoryFilter() ?? [];
         var formattedDate = startEndDateDetails() ?? [];
         getCarsList(categoryList,formattedDate);

@@ -18,7 +18,7 @@ class CarController extends Controller
     private $brand;
     public function __construct(
         Brand $brand,
-    ){
+    ) {
         $this->brand = $brand;
     }
 
@@ -29,12 +29,12 @@ class CarController extends Controller
      */
     public function index(): View
     {
-        $carsList = Car::with(['category','brand'])->latest()->paginate(5);
+        $carsList = Car::with(['category', 'brand'])->get();
         return view('admin.cars.index', compact('carsList'));
     }
 
     /**
-     * Undocumented function
+     * create car
      *
      * @return View
      */
@@ -42,17 +42,17 @@ class CarController extends Controller
     {
         $categories = Category::all();
         $brands = Brand::all();
-        return view('admin.cars.create',compact('categories', 'brands'));
+        return view('admin.cars.create', compact('categories', 'brands'));
     }
 
     /**
-     * Undocumented function
+     * store car
      *
      * @param CarStoreRequest $request
      * @return RedirectResponse
      */
     public function store(CarStoreRequest $request): RedirectResponse
-    {   
+    {
         $carData = $request->validated();
         $carData['fuel_type'] = $request->fuel_type;
         $carData['model_year'] = $request->model_year;
@@ -65,46 +65,55 @@ class CarController extends Controller
             $carData['car_image'] =  $productImage;
         }
         Car::create($carData);
-           
+
         return redirect()->route('admin.cars.index')
-                         ->with('success', 'Car Details created successfully.');
+            ->with('success', 'Car Details created successfully.');
     }
 
     /**
-     * Undocumented function
+     * edit car
      *
      * @param Car $product
      * @return View
      */
-    public function show(Car $product): View
+    public function edit(Car $car): View
     {
-        return view('products.show',compact('product'));
+        $categories = Category::all();
+        $brands = Brand::all();
+        return view('admin.cars.edit', compact('car', 'categories', 'brands'));
     }
 
     /**
-     * Undocumented function
-     *
-     * @param Car $product
-     * @return View
-     */
-    public function edit(Car $product): View
-    {
-        return view('products.edit',compact('product'));
-    }
-
-    /**
-     * Undocumented function
+     * update car
      *
      * @param CarUpdateRequest $request
      * @param Car $product
      * @return RedirectResponse
      */
-    public function update(CarUpdateRequest $request, Car $product): RedirectResponse
+    public function update(CarUpdateRequest $request, Car $car): RedirectResponse
     {
-        $product->update($request->validated());
-          
-        return redirect()->route('products.index')
-                        ->with('success','Product updated successfully');
+        $carData = $request->validated();
+        $carData['fuel_type'] = $request->fuel_type;
+        $carData['model_year'] = $request->model_year;
+        $imgFile = $request->file('car_image');
+        $previousCarImage = $car->car_image;
+
+        if ($request->hasFile('car_image') && $request->file('car_image')->isValid()) {
+
+            if (!empty($previousCarImage) && file_exists(public_path('/images/cars/' . $previousCarImage))) {
+                unlink(public_path('/images/cars/' . $previousCarImage));
+            }
+            $carData['car_image'] = $this->storeImage($imgFile);
+        }
+        try {
+            $car->update($carData);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.cars.index')
+                ->with('success', [$e->getMessage()]);
+        }
+
+        return redirect()->route('admin.cars.index')
+            ->with('success', 'Car Details Updated successfully.');
     }
 
     /**
@@ -116,9 +125,9 @@ class CarController extends Controller
     public function destroy(Car $product): RedirectResponse
     {
         $product->delete();
-           
+
         return redirect()->route('products.index')
-                        ->with('success','Product deleted successfully');
+            ->with('success', 'Product deleted successfully');
     }
 
     /**
@@ -130,5 +139,20 @@ class CarController extends Controller
     public function getBrandItem(int $categoryId)
     {
         return  $this->brand->getBrandItem($categoryId);
+    }
+
+    /**
+     * Store the uploaded image and return the image file name
+     *
+     * @param \Illuminate\Http\UploadedFile $imgFile
+     * @return string
+     */
+    private function storeImage($imgFile): string
+    {
+        $carImage = time() . '.' . $imgFile->getClientOriginalExtension();
+        $destinationPath = public_path('/images/cars');
+        $imgFile->move($destinationPath, $carImage);
+
+        return $carImage;
     }
 }

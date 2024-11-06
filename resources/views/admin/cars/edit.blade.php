@@ -10,13 +10,15 @@
                 <div class="panel-heading ">
                     Edit Car
                 </div>
-                <form method="POST" action="{{ route('create.car') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('admin.cars.update', $car->id) }}" enctype="multipart/form-data">
                     @csrf
+                    @method('patch')
+                    
                     <div class="panel-body">
                         <div class="form-group col-md-10 ">
                             <label for="brand">Car Name:</label>
                             <input type="text" name="car_name"
-                                value="@if (!empty($carDetails)) {{ $carDetails->car_name ?? '' }} @endif"
+                                value="@if (!empty($car)) {{ $car->car_name ?? '' }} @endif"
                                 class="form-control" id="usr">
                             @error('car_name')
                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -29,7 +31,7 @@
                                     <option value="">-- select --</option>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}"
-                                            @if (!empty($carDetails)) {{ $carDetails->category_id == $category->id ? 'selected' : '' }} @endif>
+                                            @if (!empty($car)) {{ $car->category_id == $category->id ? 'selected' : '' }} @endif>
                                             {{ $category->category_name }}</option>
                                     @endforeach
                                 </select>
@@ -40,10 +42,10 @@
                             <div class="dropdown">
                                 <select class="form-control" id='brand_select'  name="brand_id">
                                     <option class="brand_list" value="">-- select --</option>
-                                    @if (!empty($carDetails->brand_id))
+                                    @if (!empty($car->brand_id))
                                         @foreach ($brands as $brand)
                                         <option value="{{ $brand->id }}"
-                                            @if (!empty($carDetails)) {{ $carDetails->brand_id == $brand->id ? 'selected' : '' }} @endif>
+                                            @if (!empty($car)) {{ $car->brand_id == $brand->id ? 'selected' : '' }} @endif>
                                             {{ $brand->brand_name }}
                                         </option>
                                         @endforeach
@@ -51,10 +53,10 @@
                                 </select>
                             </div>
                         </div>
-                    @if (!empty($carDetails->car_image))  
+                    @if (!empty($car->car_image))  
                     
                     <div class="form-group col-md-8">
-                        <img class="product-image" src="{{ asset('upimages/cars/'. $carDetails->car_image) }}" >
+                        <img class="product-image" src="{{ asset('images/cars/'. $car->car_image) }}" >
                     </div>
                      @endif
                         <div class="form-group col-md-10 ">
@@ -66,11 +68,11 @@
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                        <input type="hidden" name="previous_car_image" value="@if (!empty($carDetails->car_image)){{ $carDetails->car_image ?? '' }}@endif">
+                        <input type="hidden" name="previous_car_image" value="@if (!empty($car->car_image)){{ $car->car_image ?? '' }}@endif">
                         <div class="form-group col-md-10 ">
                             <label for="brand">Fuel Type:</label>
                             <input type="text" name="fuel_type"
-                                value="@if (!empty($carDetails)) {{ $carDetails->fuel_type ?? '' }} @endif"
+                                value="@if (!empty($car)) {{ $car->fuel_type ?? '' }} @endif"
                                 class="form-control" id="usr">
                             @error('fuel_type')
                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -79,13 +81,13 @@
                         <div class="form-group col-md-10 ">
                             <label for="brand">Model & Year:</label>
                             <input type="text" name="model_year"
-                                value="@if (!empty($carDetails)) {{ $carDetails->model_year ?? '' }} @endif"
+                                value="@if (!empty($car)) {{ $car->model_year ?? '' }} @endif"
                                 class="form-control" id="usr">
                             @error('brand_name')
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                        <input type="hidden" name="id" value="{{ !empty($carDetails) ? $carDetails->id : '' }}">
+                        <input type="hidden" name="id" value="{{ !empty($car) ? $car->id : '' }}">
                         <div class="form-group col-md-10 ">
                             <button class="btn btn-success" type="input"> Cancel</button>
                             <button class="btn btn-primary" type="submit"> Submit</button>
@@ -97,10 +99,9 @@
         </div>
     </div>
 <script>
-
 $(".category_list").change(function() {
     var categoryId = $(this).val();
-    var url = '{{ route("get-brand-items", ":id") }}';
+    var url = '{{ route("cars.brandItems", ":id") }}';
     url = url.replace(':id', categoryId);
     $.ajaxSetup({
         headers: {
@@ -111,10 +112,12 @@ $(".category_list").change(function() {
     $.ajax({
         method: 'GET',
         url : url,
-        success: function(response) {         
-            $.each(response.result, function( index, value ){
+        success: function(response) {   
+            console.log(response);      
+            $("#brand_select option:not(:first)").remove();
+            $.each(response, function( index, value ){
                 // $("#brand_select").("option:not(:first)").remove();
-                $("#brand_select option:not(:first)").remove();
+                
                 $("#brand_select").append('<option value="' + value.id + '">' + value.brand_name  + '</option>');
             });
         },
