@@ -243,8 +243,6 @@
                 </header><!-- sect-heading -->
 
                 <div id="carListing">
-
-
                 </div>
 
 
@@ -355,7 +353,7 @@
                 selectedDate: formattedDate,
             },
             success: function(response) {
-                console.log(response);
+
                 if (response.status) {
                     $("#carListing").html(response.html);
                 } else {
@@ -405,5 +403,35 @@
         var formattedDate = startEndDateDetails() ?? [];
         getCarsList(categoryList,formattedDate);
     });
+
+   
+    $(document).on('click', '.add_book', function(){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        var carId = $(this).closest("div.car-book-block").find('.booking-car-id').val();
+        // var carBlock = $(this).closest("div.car-book-block");
+        var startDate = $('#daterange').data('daterangepicker').startDate;
+        var endDate = $('#daterange').data('daterangepicker').endDate;
+
+        $.ajax({
+            method : 'POST',
+            url  : '{{route("add.booking")}}',
+            data: {
+                'carId': carId,
+                'startDate': startDate,
+                'endDate': endDate,
+            },
+            success: function(response) {
+            alert('Car selected');
+                // alertify.set('notifier','position','top-right');
+                // alertify.success(response.status);
+            },
+        });
+            return false;
+        });
     
 </script>

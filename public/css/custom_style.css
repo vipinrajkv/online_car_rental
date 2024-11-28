@@ -90,3 +90,14 @@ padding-top: 8px;
     /* background: url('bullet.png') no-repeat 4px 6px !important;  */
     background: url('/storage/images/schedule.png')!important; 
   }
+
+  .footer {
+  width: 100%;
+  /* position: absolute !important; */
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    background-color: #f8f9fa !important;
+    margin-top: 20px !important;
+  }  

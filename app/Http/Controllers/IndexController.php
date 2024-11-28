@@ -34,6 +34,7 @@ class IndexController extends Controller
         $brandDetails = $this->brand->withCount('cars')->take(5)->get();
         $categories = $this->category->take(5)->get();
         return view('layouts.main_layouts', compact(['brandDetails','categories']));
+        // return view('layouts.inner_page_layouts', compact(['brandDetails','categories'])); 
     }
 
     public function getCarsList(Request $request)
@@ -41,6 +42,7 @@ class IndexController extends Controller
         $categories = $request->query('categories') ?? [];
         $selectedDate = $request->query('selectedDate') ?? [];
         $carDetails =$this->car->getAvailableCars($categories,$selectedDate);
+        // dd($carDetails);
         $html = view('home.carlist', compact('carDetails'))->render();
 
         return response()->json([
@@ -48,6 +50,19 @@ class IndexController extends Controller
             'html' => $html,
             'message' => 'Car details fetched successfully.',
         ]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function bookingList()  {
+        // dd($this->car->get());
+        $brandDetails = $this->brand->withCount('cars')->take(5)->get();
+        $categories = $this->category->take(5)->get();
+        // return view('layouts.main_layouts', compact(['brandDetails','categories']));
+        return view('home.bookingList', compact(['brandDetails','categories'])); 
     }
 
     /**

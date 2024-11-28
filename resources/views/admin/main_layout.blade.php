@@ -6,10 +6,9 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-	<script src="{{ asset('js/style.js') }}"></script>
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-	<link rel="stylesheet" href="{{ asset('css/admin/custom_style.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/custom_style.css') }}">
 	{{-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
 		id="bootstrap-css"> --}}
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
