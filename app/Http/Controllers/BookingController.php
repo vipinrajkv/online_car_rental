@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Session;
@@ -20,26 +21,25 @@ class BookingController extends Controller
         $startDate = $request->input('startDate');
         $endDate = $request->input('endDate');
         $carData = DB::table('cars')->find($carId);
-        $rentData = DB::table('rent_rates ')->find($carId);
-        $carName = $carData->name;
+        $rentData = DB::table('rent_rates')->where('car_id',$carId)->first();
+        $carName = $carData->car_name;
 
         if (Session::has('Booking')) {
             $bookingData = Session::get('Booking');
-            
+         
             if (array_key_exists($carId, $bookingData)) {
 
                 if ($bookingData[$carId]['item_id'] ===  $carId) {
-                    $bookingData[ $carId]['startDate'] === $startDate;
-                    $bookingData[ $carId]['endDate'] === $endDate;
-                    $itemName = $bookingData[ $carId]['car_name'];
-                    Session::forget('Booking');
+                    $bookingData[$carId]['item_startDate'] === $startDate;
+                    $bookingData[$carId]['item_endDate'] === $endDate;
+                    $itemName = $bookingData[ $carId]['item_name'];
                     session::put('Booking', $bookingData);
 
                     return response()->json(['status' => '"' . $itemName . '" Already Added to Cart']);
                 }
             } else {
                 $bookingData = Session::get('Booking');
-                $bookingData[$carData->id] = $this->setBookingData($carData, $rentData);
+                $bookingData[$carData->id] = $this->setBookingData($carData, $rentData, $startDate, $endDate);
                 $cartItems =  $bookingData;
                 Session::forget('Booking');
                 session::put('Booking', $bookingData);
@@ -47,7 +47,7 @@ class BookingController extends Controller
                 return response()->json(['status' => '"' . $carName . '" Added to cart']);
             }
         } else {
-            $itemListArray[$carData->id] = $this->setBookingData($carData, $rentData);
+            $itemListArray[$carData->id] = $this->setBookingData($carData, $rentData, $startDate, $endDate);
             $cartItems =  $itemListArray;
             session::put('Booking', $cartItems);
 
@@ -64,16 +64,39 @@ class BookingController extends Controller
      * @return array
      */
     protected function setBookingData($carData, $rentData, $startDate, $endDate){
+        $updatedStartDate = new DateTime($startDate);
+        $updatedEndDate= new DateTime($endDate);
+        $interval = $updatedStartDate->diff($updatedEndDate);
+        $daysDifference = $interval->days;
+
         return $cart =  [
                 'item_id' => $carData->id,
-                'item_name' => $carData->name,
-                'item_image' => $carData->image,
+                'item_name' => $carData->car_name,
+                'item_image' => $carData->car_image,
                 'item_price_hr' => $rentData->rate_per_hr,
                 'item_price_day' => $rentData->rate_per_day,
-                'item_startDate' => $rentData->rate_per_day,
-                'item_endDate' => $startDate,
+                'item_startDate' => $startDate,
                 'item_endDate' => $endDate,
             ];
+    }
+    
+    /**
+     * List Page
+     */
+    public function carBookedList(){
+        // $productData = DB::table('tbl_product')->get();
+        $bookingList = Session::get('Booking') ? : '';
+        // dd($bookingList);
+        return view('home.bookingList', compact(['bookingList'])); 
+    }
+
+    
+    /**
+     * List Page
+     */
+    public function checkOut(){
+        $cartProduct = Session::get('Booking') ? : '';
+        return view('home.checkout', compact(['cartProduct'])); 
     }
     
 }

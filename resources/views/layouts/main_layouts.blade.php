@@ -326,13 +326,13 @@
             startDate: moment().startOf('hour'),
             endDate: moment().startOf('hour').add(32, 'hour'),
             locale: {
-                format: 'M/DD hh:mm A'
+                format: 'DD-MM-YYYY hh:mm A'
             },
         });
     });
 
     $('#daterange').on('apply.daterangepicker', function(ev, picker) {
-        var selectedDates = picker.startDate.format('M/DD hh:mm A') + ' - ' + picker.endDate.format('M/DD hh:mm A');
+        var selectedDates = picker.startDate.format('DD-MM-YYYY hh:mm A') + ' - ' + picker.endDate.format('DD-MM-YYYY hh:mm A');
         $('#daterange span').text(selectedDates);
     });
     
@@ -414,16 +414,15 @@
 
         var carId = $(this).closest("div.car-book-block").find('.booking-car-id').val();
         // var carBlock = $(this).closest("div.car-book-block");
-        var startDate = $('#daterange').data('daterangepicker').startDate;
-        var endDate = $('#daterange').data('daterangepicker').endDate;
-
+        var formattedDate = startEndDateDetails() ?? [];
+       
         $.ajax({
             method : 'POST',
             url  : '{{route("add.booking")}}',
             data: {
                 'carId': carId,
-                'startDate': startDate,
-                'endDate': endDate,
+                'startDate': formattedDate.startDate,
+                'endDate': formattedDate.endDate,
             },
             success: function(response) {
             alert('Car selected');

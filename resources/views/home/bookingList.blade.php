@@ -6,7 +6,7 @@
          <div class="container_fuild">
             <div class="row">
                <div class="col-md-12">
-                  <div class="full">
+                  <div class="full" style="text-align: center;">
                      <h3>Cart</h3>
                   </div>
                </div>
@@ -20,7 +20,7 @@
              <div class="col-md-8 cart">
                  <div class="title">
                      <div class="row">
-                         <div class="col"><h4><b>Shopping Cart</b></h4></div>
+                         <div class="col"><h4><b>Booking details</b></h4></div>
                          <div class="col align-self-center text-right text-muted">3 items</div>
                      </div>
                  </div>
@@ -32,7 +32,7 @@
                              <div class="row text-muted">Item</div>
                          </div>
                          <div class="col">
-                            <div class="row text-muted">Qty</div>
+                            <div class="row text-muted">Booking Date</div>
                          </div>
                          <div class="col">
                          <div class="row text-muted">Amount</div>
@@ -45,10 +45,11 @@
                  </div> 
                  
                  <div class="row border-top border-bottom">
+                    @foreach($bookingList as $bookingItems)
                      <div class="row main align-items-center">
                          <div class="col-2"><img class="img-fluid f-pro-img" src=""></div>
                          <div class="col">
-                             <div class="row text-muted">aaaacc</div>
+                             <div class="row text-muted">{{ $bookingItems['item_name'] }}</div>
                          </div>
                          <div class="col">
                              <a href="#">-</a><a href="#" class="border">vvvv</a><a href="#">+</a>
@@ -58,10 +59,11 @@
                             <span value="" data-value="" class="close remove_cart_item">&#10005;</span>
                         </div>
                     </div>
+                    @endforeach
                  </div>
                  
                  
-                 <div class="back-to-shop"><a href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+                 <div class="back-to-shop"><a href="#">&leftarrow;</a><span class="text-muted">Back to List</span></div>
              </div>
              <div class="col-md-4 summary">
                  <div class="f-h5"><h5><b>Summary</b></h5></div>
@@ -80,7 +82,7 @@
                      <div class="col">GRAND TOTAL</div>
                      <div class="col text-right">₹ </div>
                  </div>
-                 <button class="btn-chkout">CHECKOUT</button>
+                 <button type="button" class="btn-chkout" onclick="handleCheckout()">CHECKOUT</button>
                 </form>
              </div>
          </div>
@@ -88,3 +90,8 @@
      </div>
       <!-- end why section -->
       @endsection
+      <script>
+        function handleCheckout() {
+            window.location.href = '{{ route("checkout") }}';
+        }
+    </script>
