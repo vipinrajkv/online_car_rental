@@ -17,6 +17,7 @@ class BookingController extends Controller
     */
     public function addToBooking(Request $request)
     {
+        
         $carId = (int)$request->input('carId');
         $startDate = $request->input('startDate');
         $endDate = $request->input('endDate');
@@ -67,7 +68,10 @@ class BookingController extends Controller
         $updatedStartDate = new DateTime($startDate);
         $updatedEndDate= new DateTime($endDate);
         $interval = $updatedStartDate->diff($updatedEndDate);
-        $daysDifference = $interval->days;
+        $totalDays = $interval->days;
+        $hoursDifference = $interval->days * 24 + $interval->h;
+        $minutesDifference = $interval->i;
+        $totalHours = $hoursDifference + ($minutesDifference / 60); 
 
         return $cart =  [
                 'item_id' => $carData->id,
@@ -77,6 +81,8 @@ class BookingController extends Controller
                 'item_price_day' => $rentData->rate_per_day,
                 'item_startDate' => $startDate,
                 'item_endDate' => $endDate,
+                'booking_days' => $totalDays,
+                'booking_hours' => $totalHours,
             ];
     }
     
@@ -85,8 +91,13 @@ class BookingController extends Controller
      */
     public function carBookedList(){
         // $productData = DB::table('tbl_product')->get();
+        // Session::forget('Booking');
+        // session()->forget('Booking');
         $bookingList = Session::get('Booking') ? : '';
-        // dd($bookingList);
+        dump($bookingList);
+        Session::forget('Booking');
+        Session::flush();
+        dd($bookingList);
         return view('home.bookingList', compact(['bookingList'])); 
     }
 

@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [App\Http\Controllers\IndexController::class, 'index'])->name('cars.booking');
 Route::get('/carslist', [App\Http\Controllers\IndexController::class, 'getCarsList'])->name('cars.list');
-Route::get('/bookinglist', [App\Http\Controllers\IndexController::class, 'bookingList'])->name('booking.list');
+Route::get('/bookinglist', [App\Http\Controllers\BookingController::class, 'carBookedList'])->name('booking.list');
+Route::get('/checkout', [App\Http\Controllers\BookingController::class, 'checkOut'])->name('checkout');
 Route::post('/addToBooking', [App\Http\Controllers\BookingController::class, 'addToBooking'])->name('add.booking');
 
 Auth::routes();
