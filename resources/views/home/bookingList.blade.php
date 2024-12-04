@@ -46,15 +46,18 @@
                  
                  <div class="row border-top border-bottom">
                     @foreach($bookingList as $bookingItems)
+                    @php 
+                    $totalAmountPerDay = $bookingItems['item_price_day'] *  $bookingItems['booking_days'];
+                    @endphp
                      <div class="row main align-items-center">
-                         <div class="col-2"><img class="img-fluid f-pro-img" src=""></div>
+                         <div class="col-2"><img class="img-fluid f-pro-img" src="{{ asset('images/cars/'. $bookingItems['item_image']) }}"></div>
                          <div class="col">
                              <div class="row text-muted">{{ $bookingItems['item_name'] }}</div>
                          </div>
                          <div class="col">
-                             <a href="#">-</a><a href="#" class="border">vvvv</a><a href="#">+</a>
+                            <div class="col">{{ $bookingItems['item_startDate'] }} - {{ $bookingItems['item_endDate'] }}</div>
                          </div>
-                         <div class="col">₹ 4 * 5</div>
+                         <div class="col">{{ $bookingItems['item_price_day'] }} * {{ $bookingItems['booking_days'] }} - {{ $totalAmountPerDay }} </div>
                          <div class="col">
                             <span value="" data-value="" class="close remove_cart_item">&#10005;</span>
                         </div>

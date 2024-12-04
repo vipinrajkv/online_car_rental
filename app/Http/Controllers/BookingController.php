@@ -56,8 +56,6 @@ class BookingController extends Controller
         }
     }
 
-    
-    
     /**
      * Set Booking Data
      *
@@ -90,14 +88,8 @@ class BookingController extends Controller
      * List Page
      */
     public function carBookedList(){
-        // $productData = DB::table('tbl_product')->get();
-        // Session::forget('Booking');
-        // session()->forget('Booking');
         $bookingList = Session::get('Booking') ? : '';
-        dump($bookingList);
-        Session::forget('Booking');
-        Session::flush();
-        dd($bookingList);
+       
         return view('home.bookingList', compact(['bookingList'])); 
     }
 
