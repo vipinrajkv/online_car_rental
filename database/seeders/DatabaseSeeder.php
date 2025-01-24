@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,
             CarSeeder::class,
             LocationDetailSeeder::class,
-            LocationDetailSeeder::class,
             RentRateSeeder::class,
             BookingSeeder::class,
             BookingDetailSeeder::class,

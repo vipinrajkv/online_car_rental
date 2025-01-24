@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\BookingStatusEnum;
 use App\Enums\FuelTypeEnum;
 use App\Models\Car;
 use App\Models\User;
@@ -26,7 +27,7 @@ class BookingFactory extends Factory
             'booking_from' => now()->addDay(rand(1,5))->format('Y-m-d'),
             'booking_to' => now()->addDay(rand(5,10))->format('Y-m-d'),
             'user_id' => $user->random(),
-            'booking_status' => fake()->randomElement(FuelTypeEnum::cases())->value,
+            'booking_status' => fake()->randomElement(BookingStatusEnum::cases())->value,
         ];
     }
 }
