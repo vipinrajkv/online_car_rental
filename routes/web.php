@@ -20,8 +20,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [App\Http\Controllers\IndexController::class, 'index'])->name('cars.booking');
 Route::get('/carslist', [App\Http\Controllers\IndexController::class, 'getCarsList'])->name('cars.list');
 Route::get('/bookinglist', [App\Http\Controllers\BookingController::class, 'carBookedList'])->name('booking.list');
+Route::get('/getCartitems',  [App\Http\Controllers\BookingController::class, 'getCartItems'])->name('get-cartitems');
+Route::get('/proceedCheckout', [App\Http\Controllers\BookingController::class, 'proceedCheckout'])->name('proceed.checkout');
 Route::get('/checkout', [App\Http\Controllers\BookingController::class, 'checkOut'])->name('checkout');
 Route::post('/addToBooking', [App\Http\Controllers\BookingController::class, 'addToBooking'])->name('add.booking');
+Route::get('stripe/payment', [App\Http\Controllers\CheckOutController::class, 'payment'])->name('stripe.payment');
+Route::get('stripe/payment/success', [App\Http\Controllers\CheckOutController::class, 'paymentSuccess'])->name('stripe.payment.success');
 
 Auth::routes();
 

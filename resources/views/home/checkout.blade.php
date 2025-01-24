@@ -108,6 +108,8 @@
                     </div>
                     <div class="row lower">
                         <div class="col text-left"><a href="#"><u>Add promo code</u></a></div>
+                        <span>Card Number:</span>
+                        <input placeholder="0125 6780 4567 9909">
                     </div>
                     <button class="btn">Place order</button>
                     <p class="text-muted text-center">Complimentary Shipping & Returns</p>

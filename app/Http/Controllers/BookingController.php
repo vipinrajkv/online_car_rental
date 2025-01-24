@@ -57,6 +57,21 @@ class BookingController extends Controller
     }
 
     /**
+     * Cart Listing
+     * 
+     */
+    public function getCartItems() {
+        $cartItems = Session::get('Booking') ?: [];
+        $html = view('home.sessionCarBooking', compact('cartItems'))->render();
+
+        return response()->json([
+            'status' => true,
+            'html' => $html,
+            'message' => 'Car details fetched successfully.',
+        ]);
+    }
+
+    /**
      * Set Booking Data
      *
      * @param mixed $carData
@@ -88,8 +103,8 @@ class BookingController extends Controller
      * List Page
      */
     public function carBookedList(){
-        $bookingList = Session::get('Booking') ? : '';
-       
+        $bookingList = Session::get('Booking') ? : [];
+        // dd($bookingList);
         return view('home.bookingList', compact(['bookingList'])); 
     }
 

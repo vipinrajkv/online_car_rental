@@ -18,6 +18,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/custom_style.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/checkoutpage.css') }}"> --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -39,6 +40,12 @@
             </ul>
             <div class="social-part">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link  " href="#" data-toggle="dropdown"><i class="fa fa-car " aria-hidden="true"></i> </a>
+                        <span id="cartList"  class="badge">0</span> 
+                        <div id="cartDropDown">
+                     </div>
+                    </li>
                     @guest
                         @if (Route::has('login'))
                             <li class="nav-item">
@@ -162,20 +169,39 @@
                         </header>
                         <div class="filter-content collapse show" id="collapse_3" style="">
                             <div class="card-body">
-                                <input type="range" class="custom-range" min="0" max="100"
-                                    name="">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
+                                {{-- <input type="range" class="custom-range" min="0" max="100"
+                                    name=""  id="rangeSlider" >
+                                 
+                                <div class="form-row"> --}}
+                                    {{-- <div class="form-group col-md-6">
                                         <label>Min</label>
-                                        <input class="form-control" placeholder="$0" type="number">
+                                        <input id="minValue" class="form-control" placeholder="$0" type="number">
                                     </div>
                                     <div class="form-group text-right col-md-6">
                                         <label>Max</label>
-                                        <input class="form-control" placeholder="$1,0000" type="number">
+                                        <input id="maxValue" class="form-control" placeholder="$1,0000" type="number">
+                                    </div> --}}
+                                {{-- </div> <!-- form-row.// --> --}}
+                                {{-- <span id="demo">0</span> --}}
+                            
+                            
+                            
+                                <div id="labelHolder">
+                                    <div id="min">
+                                        
                                     </div>
-                                </div> <!-- form-row.// -->
-                                <button class="btn btn-block btn-success" id="filterSearchButton">Apply</button>
-                            </div><!-- card-body.// -->
+                                    <div id="max">
+                                    </div>
+                                  </div>
+                                  <div id="slider"></div>
+                                  <input type="hidden" value="" id="min_price_value">
+                                  <input type="hidden" value="" id="max_price_value">
+
+                            
+                            <button class="btn btn-block btn-success" id="filterSearchButton">Apply</button>
+                            
+                            
+                            {{-- </div><!-- card-body.// --> --}}
                         </div>
                     </article> <!-- filter-group .// -->
                     <article class="filter-group">
@@ -264,6 +290,7 @@
 </body>
 </htm />
 {{-- <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script> --}}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $('.navbar-light .dmenu').hover(function() {
@@ -271,6 +298,17 @@
         }, function() {
             $(this).find('.sm-menu').first().stop(true, true).slideUp(105)
         });
+        console.log("jQuery is loaded and ready!");
+
+        var slider = document.getElementById("rangeSlider");
+        var output = document.getElementById("demo");
+        output.innerHTML = slider.value; // Display the default slider value
+
+        // Update the current slider value (each time you drag the slider handle)
+        slider.oninput = function() {
+            output.innerHTML = this.value;
+        }
+
     });
 </script>
 <script type="text/javascript">
@@ -319,6 +357,78 @@
             cache: true
         }
     });
+
+    $('#cartList').on('click',function (e) {
+        alert('clicked');
+        getCartItems();
+    });
+
+    function getCartItems(categoryList,formattedDate) {  
+    $.ajax({
+        method: 'GET',
+        url: '{{ route('get-cartitems') }}',
+        success: function(response) {
+            if (response.status) {
+                $("#cartDropDown").html(response.html);
+                $('.dropdown-menu').slideToggle();
+            } else {
+                console.error('Failed to load cars: ' + response.message);
+            }
+        },
+    });
+    }
+
+
+
+    $("#slider").slider({
+    range: true,
+    min: 89,
+    max: 98,
+    step: 1,
+    values: [89, 98],
+    slide: function(event, ui) {
+      if ((ui.values[1] - ui.values[0]) < 1) {
+        return false;
+      }
+    //   var delay = function() {
+    //     //loop through the span...
+    //     $("#slider").find(".ui-slider-handle").each(function(index) {
+    //       var label = index == 0 ? '#min' : '#max'; //change selector
+    //       //assign value
+    //       $(label).html(ui.values[index]).position({
+    //         my: 'center top',
+    //         at: 'center bottom',
+    //         of: $(this), // current span which is iterated..
+    //         offset: "0, 10"
+    //       });
+    //     });
+
+    //   };
+
+      // wait for the ui.handle to set its position
+    //   setTimeout(delay, 5);
+    updateLabels(ui.values);
+    }
+  });
+  function updateLabels(values) {
+    $("#min_price_value").val(values[0]);
+      $("#min").html(values[0]).position({
+        my: 'center top',
+        at: 'center bottom',
+        of: $("#slider .ui-slider-handle:eq(0)"), // First handle
+        offset: "0, 10"
+      });
+
+      $("#max").html(values[1]).position({
+        my: 'center top',
+        at: 'center bottom',
+        of: $("#slider .ui-slider-handle:eq(1)"), // Second handle
+        offset: "0, 10"
+      });
+    }
+
+    // Display the initial min and max values on page load
+    updateLabels($("#slider").slider("values"));
 
     $(function() {
         $('#daterange').daterangepicker({

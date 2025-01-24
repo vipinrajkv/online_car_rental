@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\FuelTypeEnum;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Dotenv\Parser\Value;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -50,6 +52,14 @@ class Car extends Model
     protected function Casts():array
     {
         return ['fuel_type' => FuelTypeEnum::class];
+    }
+    
+
+    protected function carName():Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => ucfirst($value)
+        );
     }
 
     /**

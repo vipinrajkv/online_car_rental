@@ -45,24 +45,32 @@
                  </div> 
                  
                  <div class="row border-top border-bottom">
-                    @foreach($bookingList as $bookingItems)
+                    @php
+                        $grandTotal = 0;
+                    @endphp
+                    @forelse ($bookingList as $bookingItems)
                     @php 
                     $totalAmountPerDay = $bookingItems['item_price_day'] *  $bookingItems['booking_days'];
+                    $grandTotal += $bookingItems['item_price_day'] *  $bookingItems['booking_days'];
                     @endphp
                      <div class="row main align-items-center">
                          <div class="col-2"><img class="img-fluid f-pro-img" src="{{ asset('images/cars/'. $bookingItems['item_image']) }}"></div>
                          <div class="col">
                              <div class="row text-muted">{{ $bookingItems['item_name'] }}</div>
                          </div>
-                         <div class="col">
+                         <div class="col" style="font-size: 15px;">
                             <div class="col">{{ $bookingItems['item_startDate'] }} - {{ $bookingItems['item_endDate'] }}</div>
                          </div>
-                         <div class="col">{{ $bookingItems['item_price_day'] }} * {{ $bookingItems['booking_days'] }} - {{ $totalAmountPerDay }} </div>
+                         <div class="col">{{ $bookingItems['item_price_day'] }} x {{ $bookingItems['booking_days'] }} = {{ $totalAmountPerDay }} </div>
                          <div class="col">
                             <span value="" data-value="" class="close remove_cart_item">&#10005;</span>
                         </div>
                     </div>
-                    @endforeach
+                    @empty
+                    <div class="row main align-items-center">
+                        <p>No items found</p>
+                    </div>
+                    @endforelse
                  </div>
                  
                  
@@ -71,22 +79,39 @@
              <div class="col-md-4 summary">
                  <div class="f-h5"><h5><b>Summary</b></h5></div>
                  <hr>
-                 <div class="row">
-                     <div class="col" style="">TOTAL AMOUNT </div>
-                     <div class="col text-right">₹  </div>
-                 </div>
-                 <form class="f-form">
-                     {{-- <p>SHIPPING</p> --}}
-                     <select><option class="text-muted">Standard-Delivery- 5.00</option></select>
-                     <p>GIVE CODE</p>
-                     <input id="code" placeholder="Enter your code">
-                 
-                 <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
-                     <div class="col">GRAND TOTAL</div>
-                     <div class="col text-right">₹ </div>
-                 </div>
-                 <button type="button" class="btn-chkout" onclick="handleCheckout()">CHECKOUT</button>
-                </form>
+                
+
+                <div class="cart-totals">
+                    <h3>Cart Totals</h3>
+                    <form action="#" method="get" accept-charset="utf-8">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Subtotal</td>
+                                    <td class="subtotal">$2,589.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Shipping</td>
+                                    <td class="free-shipping">Free Shipping</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td>Total</td>
+                                    <td class="price-total">Rs {{$grandTotal}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="btn-cart-totals">
+                            <a href="{{route('stripe.payment')}}" class="checkout round-black-btn" title="">Proceed to Checkout</a>
+                        </div>
+                        <!-- /.btn-cart-totals -->
+                    </form>
+                    <!-- /form -->
+                </div>
+
+
+
+
+
              </div>
          </div>
          

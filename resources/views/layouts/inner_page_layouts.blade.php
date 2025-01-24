@@ -18,6 +18,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/custom_style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/checkoutpage.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -37,10 +38,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
                 </li>
-
+                
             </ul>
             <div class="social-part">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link  " href="#" data-toggle="dropdown"><i class="fa fa-car " aria-hidden="true"></i> </a>
+                        <span id="cartList"  class="badge">0</span> 
+                        <div id="cartDropDown">
+                     </div>
+                    </li>
                     @guest
                         @if (Route::has('login'))
                             <li class="nav-item">
@@ -229,6 +236,24 @@
         getCarsList(categoryList,formattedDate);
     });
 
+    $('#cartList').on('click',function (e) {
+        alert('clicked');
+        getCartItems();
+    });
 
+    function getCartItems(categoryList,formattedDate) {  
+    $.ajax({
+        method: 'GET',
+        url: '{{ route('get-cartitems') }}',
+        success: function(response) {
+            if (response.status) {
+                $("#cartDropDown").html(response.html);
+                $('.dropdown-menu').slideToggle();
+            } else {
+                console.error('Failed to load cars: ' + response.message);
+            }
+        },
+    });
+    }
     
 </script>

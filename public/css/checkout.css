@@ -63,7 +63,7 @@ body{
 .icons{
   margin-left: auto;
 }
-form span{
+/* form span{
   color: rgb(179, 179, 179);
   font-size: 13px;
 }
@@ -71,21 +71,21 @@ form{
   padding: 2vh 0;
 }
 input{
-  border: 1px solid rgba(0, 0, 0, 0.137);
-  padding: 1vh;
-  margin-bottom: 3vh;
+  border: 1px solid rgba(0, 0, 0, 0.137) !important;
+  padding: 1vh !important;
+  margin-bottom: 3vh !important;
   outline: none;
   width: 100%;
   background-color: rgb(247, 247, 247);
-  font-size: 13px;
+  font-size: 13px !important;
 }
 input:focus::-webkit-input-placeholder
 {
     color:transparent;
-}
-.header{
+} */
+/* .header{
   font-size: 1.0rem;
-}
+} */
 .left{
   background-color: #ffffff;
   padding: 2vh;   
